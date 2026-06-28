@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /auth
+Disallow: /dashboard
+Disallow: /classes
+Disallow: /students
+Disallow: /bulletins
+Disallow: /settings
+Disallow: /setup
