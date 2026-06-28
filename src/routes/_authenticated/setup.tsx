@@ -76,7 +76,7 @@ function SetupWizard() {
       toast.success("School created");
       navigate({ to: "/dashboard" });
     },
-    onError: (e) => toast.error(e instanceof Error ? e.message : "Failed to create school"),
+    onError: (e: any) => toast.error(e?.message ?? "Failed to create school"),
   });
 
   const canNext1 = !!name.trim();
