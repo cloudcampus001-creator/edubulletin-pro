@@ -5,7 +5,6 @@ import { GraduationCap, Mail, Lock } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -71,16 +70,18 @@ function AuthPage() {
 
   const handleGoogle = async () => {
     setLoading(true);
-    const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin + "/auth",
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: window.location.origin + "/auth",
+      },
     });
-    if (result.error) {
+    if (error) {
       toast.error("Google sign-in failed");
       setLoading(false);
-      return;
     }
-    if (result.redirected) return;
-    navigate({ to: (redirectTo ?? "/dashboard") as never });
+    // Supabase redirects the browser to Google and then back to /auth.
+    // On return, beforeLoad detects the session and navigates to /dashboard.
   };
 
   return (
@@ -102,7 +103,7 @@ function AuthPage() {
           </h2>
           <p className="mt-4 text-sm leading-relaxed text-primary-foreground/80">
             Francophone &amp; Anglophone — moyennes, ranks, conduct, conseil de classe, all
-            on one PDF that matches what you’re already using.
+            on one PDF that matches what you're already using.
           </p>
         </div>
         <p className="text-xs text-primary-foreground/60">© {new Date().getFullYear()} Bulletin</p>
@@ -124,7 +125,7 @@ function AuthPage() {
           </h1>
           <p className="mt-2 text-sm text-muted-foreground">
             {mode === "signup"
-              ? "We’ll walk you through the school setup wizard after sign up."
+              ? "We'll walk you through the school setup wizard after sign up."
               : "Continue to your dashboard."}
           </p>
 
