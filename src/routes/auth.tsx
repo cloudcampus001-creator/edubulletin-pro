@@ -27,7 +27,7 @@ export const Route = createFileRoute("/auth")({
   beforeLoad: async ({ search }) => {
     if (typeof window === "undefined") return;
     const { data } = await supabase.auth.getSession();
-    if (data.session) throw redirect({ to: search.redirect ?? "/dashboard" as never });
+    if (data.session) throw redirect({ to: (search.redirect ?? "/dashboard") as never });
   },
   component: AuthPage,
 });
